@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GameMoodMatcher Social</title>
+  <link rel="icon" href="https://em-content.zobj.net/source/microsoft-teams/363/video-game_1f3ae.png" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #121212;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+    h1 { color: #ff004f; margin-top: 1rem; }
+    .card {
+      background: #1e1e1e;
+      padding: 1rem;
+      margin: 1rem 0;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 600px;
+    }
+    input, textarea, button {
+      width: 100%;
+      margin: 0.5rem 0;
+      padding: 0.7rem;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      background: #ff004f;
+      color: white;
+      cursor: pointer;
+    }
+    .profile, .leaderboard {
+      margin-top: 2rem;
+    }
+    .comment { border-top: 1px solid #333; padding-top: 0.5rem; margin-top: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>🎮 GameMoodMatcher Social</h1>
+
+  <div class="card" id="loginCard">
+    <h3>Accedi o Registrati</h3>
+    <input type="text" id="username" placeholder="Nome utente">
+    <button onclick="login()">Entra</button>
+  </div>
+
+  <div class="card" id="profileCard" style="display:none;">
+    <h3>👤 Profilo di <span id="profileName"></span></h3>
+    <p>XP: <span id="xp">0</span> | Badge: 🎖️ Newbie</p>
+  </div>
+
+  <div class="card" id="suggestionCard" style="display:none;">
+    <h3>Consiglio del giorno</h3>
+    <p><strong>Rocket League</strong> - Azione veloce e competitiva per alzare il morale!</p>
+    <textarea id="commentText" placeholder="Scrivi un commento..."></textarea>
+    <button onclick="postComment()">Commenta</button>
+    <div id="comments"></div>
+  </div>
+
+  <div class="card leaderboard" id="leaderboardCard" style="display:none;">
+    <h3>🏆 Classifica Gamer</h3>
+    <ol>
+      <li>AlexXP - 320 XP</li>
+      <li>LunaPlayz - 280 XP</li>
+      <li><span id="userListName">Tu</span> - <span id="userXP">100</span> XP</li>
+    </ol>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      if (!username) return alert("Inserisci un nome utente!");
+      localStorage.setItem("gamerUser", username);
+      localStorage.setItem("gamerXP", 100);
+      document.getElementById("loginCard").style.display = "none";
+      document.getElementById("profileCard").style.display = "block";
+      document.getElementById("suggestionCard").style.display = "block";
+      document.getElementById("leaderboardCard").style.display = "block";
+      document.getElementById("profileName").textContent = username;
+      document.getElementById("userListName").textContent = username;
+      document.getElementById("userXP").textContent = "100";
+    }
+
+    function postComment() {
+      const text = document.getElementById("commentText").value.trim();
+      if (!text) return;
+      const div = document.createElement("div");
+      div.className = "comment";
+      div.innerHTML = `<strong>Tu:</strong> ${text}`;
+      document.getElementById("comments").appendChild(div);
+      document.getElementById("commentText").value = "";
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      const user = localStorage.getItem("gamerUser");
+      if (user) {
+        document.getElementById("username").value = user;
+        login();
+      }
+    });
+  </script>
+</body>
+</html>
